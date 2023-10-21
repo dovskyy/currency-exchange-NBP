@@ -17,7 +17,6 @@ public class CurrencyRateService {
 
     @Autowired
     private RestTemplate restTemplate;
-
     @Autowired
     private CurrencyRateRepository currencyRateRepository;
 
@@ -28,6 +27,16 @@ public class CurrencyRateService {
 
         List<CurrencyRate> rates = new ArrayList<>();
 
+        for (CurrencyRateDTO currencyRateDTO : ratesDTO) {
+            CurrencyRate currencyRate = new CurrencyRate();
+            currencyRate.setEffectiveDate(effectiveDate);
+            currencyRate.setCode(currencyRateDTO.code());
+            currencyRate.setRate(currencyRateDTO.mid());
+            currencyRate.setCurrencyName(currencyRateDTO.currency());
+            rates.add(currencyRate);
+        }
+
+        currencyRateRepository.saveAll(rates);
     }
 
 

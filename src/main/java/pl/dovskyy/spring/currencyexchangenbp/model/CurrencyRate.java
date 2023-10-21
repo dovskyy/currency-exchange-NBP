@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -19,9 +20,9 @@ public class CurrencyRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String currencyName;
     private String code;
-    private double rate;
+    private BigDecimal rate;
     private LocalDate effectiveDate;
+
 }

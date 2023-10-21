@@ -1,4 +1,6 @@
 package pl.dovskyy.spring.currencyexchangenbp.dto;
 
-public record CurrencyRateDTO() {
+import java.math.BigDecimal;
+
+public record CurrencyRateDTO(String currency, String code, BigDecimal mid) {
 }
