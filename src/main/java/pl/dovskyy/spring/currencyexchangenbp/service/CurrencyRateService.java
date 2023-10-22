@@ -21,9 +21,12 @@ public class CurrencyRateService {
     private CurrencyRateRepository currencyRateRepository;
 
     public void fetchAndSaveCurrencyData() {
-        CurrencyExchangeDTO currencyExchangeDTO = restTemplate.getForObject(NbpApiUrls.ALL.getUrl(), CurrencyExchangeDTO.class);
-        List<CurrencyRateDTO> ratesDTO = currencyExchangeDTO.rates();
-        LocalDate effectiveDate = currencyExchangeDTO.effectiveDate();
+
+        //get list of CurrencyExchangeDTO from NBP API, the API returns an array of CurrencyExchangeDTO, but we need only one element of currencyExchangeDTO and then extract currencyRateDTO from it.
+        CurrencyExchangeDTO[] currencyExchangeDTO = restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/tables/a/", CurrencyExchangeDTO[].class);
+        List<CurrencyRateDTO> ratesDTO = currencyExchangeDTO[0].rates();
+        LocalDate effectiveDate = currencyExchangeDTO[0].effectiveDate();
+
 
         List<CurrencyRate> rates = new ArrayList<>();
 
