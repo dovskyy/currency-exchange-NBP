@@ -15,19 +15,21 @@ import java.util.List;
 @Service
 public class CurrencyRateService {
 
+
     @Autowired
     private RestTemplate restTemplate;
+
     @Autowired
     private CurrencyRateRepository currencyRateRepository;
 
     public void fetchAndSaveCurrencyData() {
 
         //get list of CurrencyExchangeDTO from NBP API, the API returns an array of CurrencyExchangeDTO, but we need only one element of currencyExchangeDTO and then extract currencyRateDTO from it.
-        CurrencyExchangeDTO[] currencyExchangeDTO = restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/tables/a/", CurrencyExchangeDTO[].class);
+        CurrencyExchangeDTO[] currencyExchangeDTO = restTemplate.getForObject(NbpApiUrls.ALL.getUrl(), CurrencyExchangeDTO[].class);
         List<CurrencyRateDTO> ratesDTO = currencyExchangeDTO[0].rates();
         LocalDate effectiveDate = currencyExchangeDTO[0].effectiveDate();
 
-
+        //create list of CurrencyRate from list of CurrencyRateDTO
         List<CurrencyRate> rates = new ArrayList<>();
 
         for (CurrencyRateDTO currencyRateDTO : ratesDTO) {
@@ -39,6 +41,7 @@ public class CurrencyRateService {
             rates.add(currencyRate);
         }
 
+        //save list of CurrencyRate to database
         currencyRateRepository.saveAll(rates);
     }
 
