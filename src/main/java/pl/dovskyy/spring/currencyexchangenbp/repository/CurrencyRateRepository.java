@@ -6,4 +6,7 @@ import pl.dovskyy.spring.currencyexchangenbp.model.CurrencyRate;
 
 @Repository
 public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Long> {
+    CurrencyRate findByCode(String code);
+
+    void deleteByCode(String code);
 }

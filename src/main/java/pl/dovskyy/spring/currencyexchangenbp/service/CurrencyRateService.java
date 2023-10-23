@@ -12,9 +12,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for fetching and saving currency data from NBP API
+ */
+
 @Service
 public class CurrencyRateService {
-
 
     @Autowired
     private RestTemplate restTemplate;
@@ -32,6 +35,9 @@ public class CurrencyRateService {
         //create list of CurrencyRate from list of CurrencyRateDTO
         List<CurrencyRate> rates = new ArrayList<>();
 
+        //delete all existing CurrencyRate from database
+        if (!ratesDTO.isEmpty()) currencyRateRepository.deleteAll();
+
         for (CurrencyRateDTO currencyRateDTO : ratesDTO) {
             CurrencyRate currencyRate = new CurrencyRate();
             currencyRate.setEffectiveDate(effectiveDate);
@@ -41,9 +47,27 @@ public class CurrencyRateService {
             rates.add(currencyRate);
         }
 
-        //save list of CurrencyRate to database
+        //save updated list of CurrencyRate to database
         currencyRateRepository.saveAll(rates);
     }
+
+    public List<CurrencyRate> getAllCurrencyRates() {
+        return currencyRateRepository.findAll();
+    }
+
+    public CurrencyRate getCurrencyRateByCode(String code) {
+        return currencyRateRepository.findByCode(code);
+    }
+
+    public void deleteCurrencyRateByCode(String code) {
+        currencyRateRepository.deleteByCode(code);
+    }
+
+    public void deleteAllCurrencyRates() {
+        currencyRateRepository.deleteAll();
+    }
+
+
 
 
 
