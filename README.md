@@ -71,20 +71,20 @@ The request will fetch all currency pairs from NBP API and save them to the data
 ### Getting all currency pairs from the database
 To get all currency pairs from the database send a GET request to the endpoint:
 ```
-GET localhost:8080/currency-exchange/api/get-all
+GET localhost:8080/currency-exchange/api/all
 ```
 
 ### Getting all currency pairs from the database by currency code
 To get all currency pairs from the database by currency code send a GET request to the endpoint:
 ```
-GET localhost:8080/currency-exchange/api/get-by-code/{code}
+GET localhost:8080/currency-exchange/api/getRate
 ```
 The request should contain the parameter:
 - `code` - currency code
 
 Example request:
 ```
-GET localhost:8080/currency-exchange/api/get-by-code/USD
+GET localhost:8080/currency-exchange/api/getRate?code=USD
 ```
 The above request will return all currency pairs from the database with USD currency code.
 
