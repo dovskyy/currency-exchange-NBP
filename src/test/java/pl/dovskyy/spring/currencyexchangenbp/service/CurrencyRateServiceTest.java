@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import pl.dovskyy.spring.currencyexchangenbp.model.CurrencyRate;
 import pl.dovskyy.spring.currencyexchangenbp.repository.CurrencyRateRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,7 @@ class CurrencyRateServiceTest {
     @Autowired
     private CurrencyRateService currencyRateService;
 
-    @MockBean
+    @Autowired
     private RestTemplate restTemplate;
 
     @MockBean
@@ -48,6 +49,28 @@ class CurrencyRateServiceTest {
         //then
         assertEquals(result.size(), randomInt);
         verify(currencyRateRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void testFetchAndSaveCurrencyData() {
+
+        //given
+        CurrencyRate[] currencyRates = new CurrencyRate[1];
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
+        currencyRate.setCurrencyName("dolar amerykański");
+        currencyRate.setRate(new BigDecimal("3.7890"));
+        currencyRates[0] = currencyRate;
+
+
+    }
+
+    @Test
+    public void testDeleteAllCurrencyRates() {
+
+        //given
+
+
     }
 
 }
