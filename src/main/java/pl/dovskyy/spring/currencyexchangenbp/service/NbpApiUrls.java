@@ -2,6 +2,7 @@ package pl.dovskyy.spring.currencyexchangenbp.service;
 
 /*
 Official NBP API documentation can be found over here: http://api.nbp.pl/
+
  */
 
 public enum NbpApiUrls {

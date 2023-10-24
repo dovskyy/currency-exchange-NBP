@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dovskyy.spring.currencyexchangenbp.service.CurrencyRateService;
 
+//TODO: add swagger
+
 @RestController
 @RequestMapping("/currency-exchange/api")
 public class CurrencyRateController {
