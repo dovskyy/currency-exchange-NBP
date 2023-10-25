@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dovskyy.spring.currencyexchangenbp.service.CurrencyRateService;
 
+import java.math.BigDecimal;
+
 //TODO: add swagger
 
 @RestController
@@ -35,6 +37,18 @@ public class CurrencyRateController {
     @GetMapping("/getRate")
     public ResponseEntity<?> getCurrencyRateByCode(@RequestParam String code) {
         return ResponseEntity.ok(currencyRateService.getCurrencyRateByCode(code));
+    }
+
+    //example: http://localhost:8080/currency-exchange/api/convertToPln?code=USD&amount=100
+    @GetMapping("/convertToPln")
+    public ResponseEntity<?> convertCurrencyToPln (@RequestParam String code, @RequestParam BigDecimal amount) {
+        return ResponseEntity.ok(currencyRateService.convertCurrencyToPln(code, amount));
+    }
+
+    //example: http://localhost:8080/currency-exchange/api/convertFromPln?code=USD&amount=100
+    @GetMapping("/convertFromPln")
+    public ResponseEntity<?> convertFromPlnToCurrency (@RequestParam String code, @RequestParam BigDecimal amount) {
+        return ResponseEntity.ok(currencyRateService.convertPlnToCurrency(code, amount));
     }
 
 

@@ -8,6 +8,8 @@ import pl.dovskyy.spring.currencyexchangenbp.dto.CurrencyRateDTO;
 import pl.dovskyy.spring.currencyexchangenbp.model.CurrencyRate;
 import pl.dovskyy.spring.currencyexchangenbp.repository.CurrencyRateRepository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +70,14 @@ public class CurrencyRateService {
     }
 
 
+    public BigDecimal convertCurrencyToPln(String code, BigDecimal amount) {
+        BigDecimal rate = currencyRateRepository.findByCode(code).getRate();
+        return rate.multiply(amount);
+    }
 
-
-
-
+    public BigDecimal convertPlnToCurrency(String code, BigDecimal amount) {
+        BigDecimal rate = currencyRateRepository.findByCode(code).getRate();
+        BigDecimal result = amount.divide(rate, 2, RoundingMode.DOWN); //rounding down to 2 decimal places
+        return result;
+    }
 }

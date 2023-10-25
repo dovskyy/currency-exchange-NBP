@@ -68,7 +68,6 @@ class CurrencyRateServiceTest {
     @Test
     public void testDeleteAllCurrencyRates() {
 
-        //given
 
 
     }
