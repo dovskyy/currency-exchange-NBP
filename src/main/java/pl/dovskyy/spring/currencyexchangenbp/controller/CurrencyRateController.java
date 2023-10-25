@@ -51,5 +51,12 @@ public class CurrencyRateController {
         return ResponseEntity.ok(currencyRateService.convertPlnToCurrency(code, amount));
     }
 
+    @ExceptionHandler
+    public ResponseEntity<?> handleException(Exception e) {
+        return ResponseEntity.badRequest().
+                body(e.getMessage()
+                        .concat(". Lookup Documentation at: https://github.com/dovskyy/currency-exchange-NBP"));
+    }
+
 
 }
