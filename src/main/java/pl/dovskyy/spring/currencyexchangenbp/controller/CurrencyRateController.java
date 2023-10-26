@@ -1,13 +1,13 @@
 package pl.dovskyy.spring.currencyexchangenbp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.dovskyy.spring.currencyexchangenbp.model.CurrencyRate;
 import pl.dovskyy.spring.currencyexchangenbp.service.CurrencyRateService;
 
 import java.math.BigDecimal;
-
-//TODO: add swagger
 
 @RestController
 @RequestMapping("/currency-exchange/api")
@@ -18,8 +18,12 @@ public class CurrencyRateController {
 
     @GetMapping("/fetch")
     public ResponseEntity<String> fetchAndSaveCurrencyFromNbpApi() {
-        currencyRateService.fetchAndSaveCurrencyData();
-        return ResponseEntity.ok("Data fetched and saved.");
+        boolean isFetched = currencyRateService.fetchAndSaveCurrencyData();
+        if (isFetched) {
+            return ResponseEntity.ok("Data fetched and saved successfully.");
+        } else {
+            return new ResponseEntity<>("Error while fetching data from NBP API.", HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
     @GetMapping("/all")
@@ -36,25 +40,59 @@ public class CurrencyRateController {
     //example: http://localhost:8080/currency-exchange/api/getRate?code=USD
     @GetMapping("/getRate")
     public ResponseEntity<?> getCurrencyRateByCode(@RequestParam String code) {
-        return ResponseEntity.ok(currencyRateService.getCurrencyRateByCode(code));
+        CurrencyRate currencyRate = currencyRateService.getCurrencyRateByCode(code);
+        if (currencyRate == null) {
+            return new ResponseEntity<>("Currency code not found: " + code + "\nTry calling /all request to lookup available codes", HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.ok(currencyRate);
+        }
     }
 
     //example: http://localhost:8080/currency-exchange/api/convertToPln?code=USD&amount=100
     @GetMapping("/convertToPln")
-    public ResponseEntity<?> convertCurrencyToPln (@RequestParam String code, @RequestParam BigDecimal amount) {
-        return ResponseEntity.ok(currencyRateService.convertCurrencyToPln(code, amount));
+    public ResponseEntity<?> convertCurrencyToPln(@RequestParam String code, @RequestParam BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            return new ResponseEntity<>("Amount must be positive", HttpStatus.BAD_REQUEST);
+        }
+        BigDecimal result = currencyRateService.convertCurrencyToPln(code, amount);
+        if (result == null) {
+            return new ResponseEntity<>("Currency code not found: " + code + "\nTry calling /all request to lookup available codes", HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.ok(result);
+        }
     }
 
     //example: http://localhost:8080/currency-exchange/api/convertFromPln?code=USD&amount=100
     @GetMapping("/convertFromPln")
-    public ResponseEntity<?> convertFromPlnToCurrency (@RequestParam String code, @RequestParam BigDecimal amount) {
-        return ResponseEntity.ok(currencyRateService.convertPlnToCurrency(code, amount));
+    public ResponseEntity<?> convertFromPlnToCurrency(@RequestParam String code, @RequestParam BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            return new ResponseEntity<>("Amount must be positive", HttpStatus.BAD_REQUEST);
+        }
+        BigDecimal result = currencyRateService.convertPlnToCurrency(code, amount);
+        if (result == null) {
+            return new ResponseEntity<>("Currency code not found: " + code + "\nTry calling /all request to lookup available codes.", HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.ok(result);
+        }
     }
 
-    //example: http://localhost:8080/currency-exchange/api/getTopFive
+
     @GetMapping("/getTopFive")
     public ResponseEntity<?> getTopFiveCurrencyRates() {
-        return ResponseEntity.ok(currencyRateService.getTopFiveCurrencyRates());
+        if (currencyRateService.getTopFiveCurrencyRates() == null) {
+            return new ResponseEntity<>("No data available. Try calling /fetch request to fetch data from NBP API.", HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.ok(currencyRateService.getTopFiveCurrencyRates());
+        }
+    }
+
+    @GetMapping("/getEffectiveDate")
+    public ResponseEntity<?> getLatestEffectiveDate() {
+        if (currencyRateService.getLatestEffectiveDate() == null) {
+            return new ResponseEntity<>("No data available. Try calling /fetch request to fetch data from NBP API.", HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.ok(currencyRateService.getLatestEffectiveDate());
+        }
     }
 
 
@@ -64,6 +102,5 @@ public class CurrencyRateController {
                 body(e.getMessage()
                         .concat("\nLookup Documentation at: https://github.com/dovskyy/currency-exchange-NBP"));
     }
-
 
 }

@@ -9,8 +9,8 @@ import pl.dovskyy.spring.currencyexchangenbp.model.CurrencyRate;
 import pl.dovskyy.spring.currencyexchangenbp.repository.CurrencyRateRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -66,10 +66,145 @@ class CurrencyRateServiceTest {
     }
 
     @Test
+    public void testGetLatestEffectiveDateReturnsNull() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setEffectiveDate(null);
+
+        //when
+        when(currencyRateRepository.findTopByOrderByEffectiveDateDesc()).thenReturn(currencyRate);
+        LocalDate result = currencyRateService.getLatestEffectiveDate();
+
+        //then
+        assertNull(result);
+    }
+
+    @Test
+    public void testGetLatestEffectiveDateReturnsDate() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setEffectiveDate(LocalDate.now());
+
+        //when
+        when(currencyRateRepository.findTopByOrderByEffectiveDateDesc()).thenReturn(currencyRate);
+        when(currencyRateRepository.count()).thenReturn(1L);
+        LocalDate result = currencyRateService.getLatestEffectiveDate();
+
+        //then
+        assertNotNull(result);
+        assertEquals(result, LocalDate.now());
+    }
+
+    @Test
+    public void testGetCurrencyRateByCodeReturnsValue() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
+
+        //when
+        when(currencyRateRepository.findByCode("USD")).thenReturn(currencyRate);
+        CurrencyRate result = currencyRateService.getCurrencyRateByCode("USD");
+
+        //then
+        assertNotNull(result);
+        assertEquals(result.getCode(), "USD");
+    }
+
+    @Test
+    public void testGetCurrencyRateByCodeReturnsNull() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
+
+        //when
+        when(currencyRateRepository.findByCode("USD")).thenReturn(currencyRate);
+        CurrencyRate result = currencyRateService.getCurrencyRateByCode("EUR");
+
+        //then
+        assertNull(result);
+    }
+
+    @Test
+    public void testDeleteCurrencyRateByCodeReturnsTrue() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
+
+        //when
+        when(currencyRateRepository.findByCode("USD")).thenReturn(currencyRate);
+        boolean result = currencyRateService.deleteCurrencyRateByCode("USD");
+
+        //then
+        assertTrue(result);
+    }
+
+    @Test
+    public void testDeleteCurrencyRateByCodeReturnsFalse() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
+
+        //when
+        when(currencyRateRepository.findByCode("USD")).thenReturn(currencyRate);
+        boolean result = currencyRateService.deleteCurrencyRateByCode("EUR");
+
+        //then
+        assertFalse(result);
+    }
+
+    @Test
     public void testDeleteAllCurrencyRates() {
 
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
 
+        //when
+        currencyRateService.deleteAllCurrencyRates();
 
+        //then
+        verify(currencyRateRepository, times(1)).deleteAll();
+    }
+
+    @Test
+    public void testConvertCurrencyToPlnReturnsValue() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
+        currencyRate.setRate(new BigDecimal("3.7890"));
+
+        //when
+        when(currencyRateRepository.findByCode("USD")).thenReturn(currencyRate);
+        BigDecimal result = currencyRateService.convertCurrencyToPln("USD", new BigDecimal("100"));
+
+        //then
+        assertNotNull(result);
+        assertEquals(0, result.compareTo(new BigDecimal("378.90"))); //compareTo() returns 0 if values are equal, 1 if first value is greater, -1 if first value is smaller
+
+        //I couldn't use assertEquals(result, new BigDecimal("378.90")) here because it didn't seem to work with BigDecimal values. Actual value was 378.90, expected was 378.9000 (lol?) and test failed.
+    }
+
+    @Test
+    public void testConvertCurrencyToPlnReturnsNull() {
+
+        //given
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setCode("USD");
+        currencyRate.setRate(new BigDecimal("3.7890"));
+
+        //when
+        when(currencyRateRepository.findByCode("USD")).thenReturn(currencyRate);
+        BigDecimal result = currencyRateService.convertCurrencyToPln("EUR", new BigDecimal("100")); //EUR is not in the database
+
+        //then
+        assertNull(result);
     }
 
 }

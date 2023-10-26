@@ -57,6 +57,16 @@ GET localhost:8080/currency-exchange/api/getRate?code=USD
 The above request will return PLN/USD currency pair from the database.
 
 
+### • Get 5 currency pairs with the highest PLN exchange rate
+
+To get 5 currency pairs with the highest PLN exchange rate send a GET request to the endpoint:
+
+```
+localhost:8080/currency-exchange/api/getTopFive
+```
+
+The request will return 5 currency pairs with the highest PLN exchange rate.
+
 
 ## Technologies
 - Java 17
@@ -64,11 +74,8 @@ The above request will return PLN/USD currency pair from the database.
 - Hibernate 
 - MySQL
 - Maven
-- Lombok
-- JUnit 5
-- Mockito
-- Swagger (OpenAPI)ins
+- JUnit 5 & Mockito
+- Swagger (OpenAPI)
 
 ## API Reference
 - [NBP API](http://api.nbp.pl/)
-
