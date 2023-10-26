@@ -17,6 +17,11 @@ GET localhost:8080/currency-exchange/api/fetch
 ```
 The above request will fetch all currency pairs from NBP API and save them to the database.
 
+## Swagger
+The application provides Swagger UI that can be used to send requests to the application.
+Swagger UI is available at the endpoint:
+```http://localhost:8080/swagger-ui/index.html```
+
 ## Usage
 The application provides REST API that can be used to fetch currency pairs from NBP API, convert currency pairs and save them to the database.
 
@@ -27,46 +32,6 @@ GET localhost:8080/currency-exchange/api/fetch
 ```
 The request will fetch all currency pairs from NBP API and save them to the database.
 
-[//]: # (### Converting currency pairs)
-
-[//]: # (To convert currency pairs send a GET request to the endpoint:)
-
-[//]: # (```)
-
-[//]: # (GET localhost:8080/currency-exchange/api/convert)
-
-[//]: # (```)
-
-[//]: # (The request should contain the parameters:)
-
-[//]: # (- `from` - currency code of the currency to be converted)
-
-[//]: # (- `to` - currency code of the currency to be converted to)
-
-[//]: # (- `amount` - amount of money to be converted)
-
-[//]: # ()
-[//]: # (Example request:)
-
-[//]: # (```)
-
-[//]: # (GET localhost:8080/currency-exchange/api/convert?from=EUR&to=PLN&amount=100)
-
-[//]: # (```)
-
-[//]: # (The above request will convert 100 EUR to PLN using the exchange rate from NBP API.)
-
-[//]: # (### Saving currency pairs to the database)
-
-[//]: # (To save currency pairs to the database send a GET request to the endpoint:)
-
-[//]: # (```)
-
-[//]: # (GET localhost:8080/currency-exchange/api/save)
-
-[//]: # (```)
-
-[//]: # (The request will save all currency pairs from NBP API to the database.)
 
 ### Getting all currency pairs from the database
 To get all currency pairs from the database send a GET request to the endpoint:
@@ -98,6 +63,7 @@ The above request will return all currency pairs from the database with USD curr
 - Lombok
 - JUnit 5
 - Mockito
+- Swagger (OpenAPI)
 
 ## API Reference
 - [NBP API](http://api.nbp.pl/)
