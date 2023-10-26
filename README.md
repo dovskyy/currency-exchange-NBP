@@ -25,6 +25,7 @@ Swagger UI is available at the endpoint:
 ## Usage
 The application provides REST API that can be used to fetch currency pairs from NBP API, convert currency pairs and save them to the database.
 
+
 ### Fetching currency pairs from NBP API
 To fetch currency pairs from NBP API send a GET request to the endpoint:
 ```
@@ -33,11 +34,13 @@ GET localhost:8080/currency-exchange/api/fetch
 The request will fetch all currency pairs from NBP API and save them to the database.
 
 
+
 ### Getting all currency pairs from the database
 To get all currency pairs from the database send a GET request to the endpoint:
 ```
 GET localhost:8080/currency-exchange/api/all
 ```
+
 
 ### Getting all currency pairs from the database by currency code
 To get all currency pairs from the database by currency code send a GET request to the endpoint:
@@ -52,6 +55,7 @@ Example request:
 GET localhost:8080/currency-exchange/api/getRate?code=USD
 ```
 The above request will return all currency pairs from the database with USD currency code.
+
 
 
 ## Technologies
