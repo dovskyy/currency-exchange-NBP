@@ -80,4 +80,8 @@ public class CurrencyRateService {
         BigDecimal result = amount.divide(rate, 2, RoundingMode.DOWN); //rounding down to 2 decimal places
         return result;
     }
+
+    public List<CurrencyRate> getTopFiveCurrencyRates() {
+        return currencyRateRepository.findTop5ByOrderByRateDesc();
+    }
 }

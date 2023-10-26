@@ -51,6 +51,13 @@ public class CurrencyRateController {
         return ResponseEntity.ok(currencyRateService.convertPlnToCurrency(code, amount));
     }
 
+    //example: http://localhost:8080/currency-exchange/api/getTopFive
+    @GetMapping("/getTopFive")
+    public ResponseEntity<?> getTopFiveCurrencyRates() {
+        return ResponseEntity.ok(currencyRateService.getTopFiveCurrencyRates());
+    }
+
+
     @ExceptionHandler
     public ResponseEntity<?> handleException(Exception e) {
         return ResponseEntity.badRequest().

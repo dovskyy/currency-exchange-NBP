@@ -42,7 +42,7 @@ GET localhost:8080/currency-exchange/api/all
 ```
 
 
-### • Getting all currency pairs from the database by currency code
+### • Getting currency pair by code
 To get all currency pairs from the database by currency code send a GET request to the endpoint:
 ```
 GET localhost:8080/currency-exchange/api/getRate
@@ -54,7 +54,7 @@ Example request:
 ```
 GET localhost:8080/currency-exchange/api/getRate?code=USD
 ```
-The above request will return all currency pairs from the database with USD currency code.
+The above request will return PLN/USD currency pair from the database.
 
 
 
@@ -67,7 +67,7 @@ The above request will return all currency pairs from the database with USD curr
 - Lombok
 - JUnit 5
 - Mockito
-- Swagger (OpenAPI)
+- Swagger (OpenAPI)ins
 
 ## API Reference
 - [NBP API](http://api.nbp.pl/)
