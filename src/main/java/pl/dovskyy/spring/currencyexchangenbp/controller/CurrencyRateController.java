@@ -18,12 +18,7 @@ public class CurrencyRateController {
 
     @GetMapping("/fetch")
     public ResponseEntity<String> fetchAndSaveCurrencyFromNbpApi() {
-        boolean isFetched = currencyRateService.fetchAndSaveCurrencyData();
-        if (isFetched) {
-            return ResponseEntity.ok("Data fetched and saved successfully.");
-        } else {
-            return new ResponseEntity<>("Error while fetching data from NBP API.", HttpStatus.SERVICE_UNAVAILABLE);
-        }
+        return currencyRateService.fetchAndSaveCurrencyData();
     }
 
     @GetMapping("/all")

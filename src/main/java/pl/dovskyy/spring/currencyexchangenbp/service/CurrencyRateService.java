@@ -1,6 +1,8 @@
 package pl.dovskyy.spring.currencyexchangenbp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +17,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for CurrencyRate
+ */
+
+//TODO: add logger
+//TODO: store historical data in database
 
 @Service
 public class CurrencyRateService {
@@ -25,19 +33,18 @@ public class CurrencyRateService {
     @Autowired
     private CurrencyRateRepository currencyRateRepository;
 
-    public boolean fetchAndSaveCurrencyData() {
+    public ResponseEntity<String> fetchAndSaveCurrencyData() {
 
         try {
-            //get list of CurrencyExchangeDTO from NBP API, the API returns an array of CurrencyExchangeDTO, but we need only one element of currencyExchangeDTO and then extract currencyRateDTO from it.
             CurrencyExchangeDTO[] currencyExchangeDTO = restTemplate.getForObject(NbpApiUrls.ALL.getUrl(), CurrencyExchangeDTO[].class);
             List<CurrencyRateDTO> ratesDTO = currencyExchangeDTO[0].rates();
             LocalDate effectiveDate = currencyExchangeDTO[0].effectiveDate();
 
-            //create list of CurrencyRate from list of CurrencyRateDTO
-            List<CurrencyRate> rates = new ArrayList<>();
+            if (effectiveDate.equals(getLatestEffectiveDate())) {
+                return new ResponseEntity<>("Currency data in the database is already up to date", HttpStatus.OK);
+            }
 
-            //delete all existing CurrencyRate from database
-            if (!ratesDTO.isEmpty()) currencyRateRepository.deleteAll();
+            List<CurrencyRate> rates = new ArrayList<>();
 
             for (CurrencyRateDTO currencyRateDTO : ratesDTO) {
                 CurrencyRate currencyRate = new CurrencyRate();
@@ -48,14 +55,14 @@ public class CurrencyRateService {
                 rates.add(currencyRate);
             }
 
-            //save updated list of CurrencyRate to database
             currencyRateRepository.saveAll(rates);
-        } catch (RestClientException e) {
-            System.out.println("Error while fetching data from NBP API: " + e.getMessage());
-            return false;
+
+        } catch(RestClientException e){
+            return new ResponseEntity<>("Error during fetching data from NBP API", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return true;
+        return new ResponseEntity<>("Data fetched and updated successfully", HttpStatus.OK);
+
     }
 
     public LocalDate getLatestEffectiveDate() {
