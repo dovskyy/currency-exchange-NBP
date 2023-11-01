@@ -29,7 +29,7 @@ Here are some examples of how to use the API.
 ### • Fetching currency pairs from NBP API
 To fetch currency pairs from NBP API send a GET request to the endpoint:
 ```http
-GET localhost:8080/currency-exchange/api/fetch
+GET /currency-exchange/api/fetch
 ```
 The request will fetch all currency pairs from NBP API and save them to the database.
 
@@ -38,21 +38,21 @@ The request will fetch all currency pairs from NBP API and save them to the data
 ### • Getting all currency pairs from the database
 To get all currency pairs from the database send a GET request to the endpoint:
 ```http
-GET localhost:8080/currency-exchange/api/all
+GET /currency-exchange/api/all
 ```
 
 
 ### • Getting currency pair by code
 To get all currency pairs from the database by currency code send a GET request to the endpoint:
 ```http 
-GET localhost:8080/currency-exchange/api/getRate
+GET /currency-exchange/api/getRate
 ```
 The request should contain the parameter:
 - `code` - currency code
 
 Example request:
 ```http
-GET localhost:8080/currency-exchange/api/getRate?code=USD
+GET /currency-exchange/api/getRate?code=USD
 ```
 The above request will return PLN/USD currency pair from the database.
 
@@ -62,7 +62,7 @@ The above request will return PLN/USD currency pair from the database.
 To get 5 currency pairs with the highest PLN exchange rate send a GET request to the endpoint:
 
 ```http
-GET localhost:8080/currency-exchange/api/getTopFive
+GET /currency-exchange/api/getTopFive
 ```
 
 The request will return 5 currency pairs with the highest PLN exchange rate.
@@ -76,7 +76,7 @@ The request should contain the parameter:
 
 Example request:
 ```http
-GET localhost:8080/currency-exchange/api/getAverageRateFiveDays?code=USD
+GET /currency-exchange/api/getAverageRateFiveDays?code=USD
 ```
 The above request will return average exchange rate for USD from last five days.
 
