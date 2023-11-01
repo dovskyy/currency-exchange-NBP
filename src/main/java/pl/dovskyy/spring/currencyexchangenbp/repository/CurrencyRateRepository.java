@@ -16,4 +16,8 @@ public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Long
     List<CurrencyRate> findTop5ByOrderByRateDesc();
 
     CurrencyRate findTopByOrderByEffectiveDateDesc();
+
+    List<CurrencyRate> findTop5ByOrderByRateAsc();
+
+    List<CurrencyRate> findTop5ByCodeOrderByEffectiveDateDesc(String code);
 }

@@ -11,24 +11,24 @@ The currency pairs are converted using the exchange rate provided by API from NB
 4. Run the application using your IDE or by executing the command `mvn spring-boot:run` in the project directory
 5. Use Postman or other tool to send requests to the application
 
-Example request:
-```
-GET localhost:8080/currency-exchange/api/fetch
-```
-The above request will fetch all currency pairs from NBP API and save them to the database.
 
 ## Swagger
 The application provides Swagger UI that can be used to send requests to the application.
 Swagger UI is available at the endpoint:
 ```http://localhost:8080/swagger-ui/index.html```
 
+## Tests
+The application provides unit tests for the service layer. The tests can be run using your IDE or by executing the command `mvn test` in the project directory.
+There are over 20 unit tests in the project.
+
 ## Usage
 The application provides REST API that can be used to fetch currency pairs from NBP API, convert currency pairs and save them to the database.
+Here are some examples of how to use the API.
 
 
 ### • Fetching currency pairs from NBP API
 To fetch currency pairs from NBP API send a GET request to the endpoint:
-```
+```http
 GET localhost:8080/currency-exchange/api/fetch
 ```
 The request will fetch all currency pairs from NBP API and save them to the database.
@@ -37,21 +37,21 @@ The request will fetch all currency pairs from NBP API and save them to the data
 
 ### • Getting all currency pairs from the database
 To get all currency pairs from the database send a GET request to the endpoint:
-```
+```http
 GET localhost:8080/currency-exchange/api/all
 ```
 
 
 ### • Getting currency pair by code
 To get all currency pairs from the database by currency code send a GET request to the endpoint:
-```
+```http 
 GET localhost:8080/currency-exchange/api/getRate
 ```
 The request should contain the parameter:
 - `code` - currency code
 
 Example request:
-```
+```http
 GET localhost:8080/currency-exchange/api/getRate?code=USD
 ```
 The above request will return PLN/USD currency pair from the database.
@@ -61,12 +61,24 @@ The above request will return PLN/USD currency pair from the database.
 
 To get 5 currency pairs with the highest PLN exchange rate send a GET request to the endpoint:
 
-```
-localhost:8080/currency-exchange/api/getTopFive
+```http
+GET localhost:8080/currency-exchange/api/getTopFive
 ```
 
 The request will return 5 currency pairs with the highest PLN exchange rate.
 
+### • Get average exchange rate for a given currency code from last five days
+```http
+GET /currency-exchange/api/getAverageRateFiveDays
+```
+The request should contain the parameter:
+- `code` - currency code
+
+Example request:
+```http
+GET localhost:8080/currency-exchange/api/getAverageRateFiveDays?code=USD
+```
+The above request will return average exchange rate for USD from last five days.
 
 ## Technologies
 - Java 17

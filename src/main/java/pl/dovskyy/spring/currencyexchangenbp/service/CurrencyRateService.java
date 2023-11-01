@@ -117,4 +117,25 @@ public class CurrencyRateService {
             return currencyRateRepository.findTop5ByOrderByRateDesc();
         }
     }
+
+    public List<CurrencyRate> getBottomFiveCurrencyRates() {
+        if (currencyRateRepository.count() == 0) {
+            return null;
+        } else {
+            return currencyRateRepository.findTop5ByOrderByRateAsc();
+        }
+    }
+
+    public BigDecimal getAverageRateOfCurrencyLastFiveDays(String code) {
+        if (currencyRateRepository.count() == 0) {
+            return null;
+        } else {
+            List<CurrencyRate> currencyRates = currencyRateRepository.findTop5ByCodeOrderByEffectiveDateDesc(code);
+            BigDecimal sum = new BigDecimal("0");
+            for (CurrencyRate currencyRate : currencyRates) {
+                sum = sum.add(currencyRate.getRate());
+            }
+            return sum.divide(new BigDecimal(currencyRates.size()), RoundingMode.DOWN);
+        }
+    }
 }

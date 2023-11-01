@@ -90,6 +90,15 @@ public class CurrencyRateController {
         }
     }
 
+    @GetMapping("/getAverageRateFiveDays")
+    public ResponseEntity<?> getAverageRateFiveDays(@RequestParam String code) {
+        if (currencyRateService.getAverageRateOfCurrencyLastFiveDays(code) == null) {
+            return new ResponseEntity<>("No data available. Try calling /fetch request to fetch data from NBP API.", HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.ok(currencyRateService.getAverageRateOfCurrencyLastFiveDays(code));
+        }
+    }
+
 
     @ExceptionHandler
     public ResponseEntity<?> handleException(Exception e) {
