@@ -33,6 +33,9 @@ public class CurrencyRateService {
     @Autowired
     private CurrencyRateRepository currencyRateRepository;
 
+
+
+
     public ResponseEntity<String> fetchAndSaveCurrencyData() {
 
         try {
@@ -77,8 +80,15 @@ public class CurrencyRateService {
         return currencyRateRepository.findAll();
     }
 
+    //gets the latest currency rate by code, gets the rate with the latest effective date
     public CurrencyRate getCurrencyRateByCode(String code) {
-        return currencyRateRepository.findByCode(code);
+        List<CurrencyRate> currencyRates = currencyRateRepository.findByCodeOrderByEffectiveDateDesc(code);
+        if (currencyRates.isEmpty()) {
+            return null;
+        } else {
+            return currencyRates.get(0);
+            //returns the latest currency rate on the index 0, the list is sorted by effective date descending
+        }
     }
 
     public boolean deleteCurrencyRateByCode(String code) {
